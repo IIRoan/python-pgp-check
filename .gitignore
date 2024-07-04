@@ -2,3 +2,5 @@
 dist
 build
 /build
+.pytest_cache
+/.pytest_cache
