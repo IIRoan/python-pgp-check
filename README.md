@@ -1,6 +1,6 @@
 # Python PGP Check
 
-A quick python CLI tool to verify file GPG hashes
+A quick python CLI tool to verify file PGP hashes
 
 
 ### Installation and usage
