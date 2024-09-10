@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: python-pgp-check
-Version: 0.2.1
+Version: 0.2.5
 Summary: A CLI tool to verify file hashes
 Home-page: https://github.com/iiroan/python-pgp-check
 Author: IRoan
