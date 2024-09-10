@@ -18,11 +18,6 @@ def calculate_file_hash(file_path, hash_algorithm='sha256'):
             hash_func.update(chunk)
     return hash_func.hexdigest()
 
-def verify_hash(file_path, expected_hash, hash_algorithm='sha256'):
-    """Verify if the file's hash matches the expected hash."""
-    calculated_hash = calculate_file_hash(file_path, hash_algorithm)
-    return calculated_hash == expected_hash
-
 def spinner_animation():
     """Display a spinner animation."""
     spinner = itertools.cycle(['-', '/', '|', '\\'])
@@ -64,7 +59,7 @@ def main():
             print(f"Calculated: {calculated_hash}")
             print(f"Expected:   {args.expected_hash}")
             
-            if verify_hash(args.file_location, args.expected_hash, args.algorithm):
+            if calculated_hash == args.expected_hash:
                 print(f"\n{CHECK_MARK} Hash verification successful!")
                 sys.exit(0)
             else:
