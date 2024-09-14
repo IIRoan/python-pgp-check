@@ -2,10 +2,15 @@ from setuptools import setup, find_packages
 
 setup(
     name='python-pgp-check',
-    version='0.2.10',
+    version='0.2.11',
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
     install_requires=[],
+    entry_points={
+        'console_scripts': [
+            'python-pgp-check=pgp_check.cli:main',
+        ],
+    },
     author='IRoan',
     author_email='pypi@lunary.roan.zip',
     description='A CLI tool to verify file hashes',
