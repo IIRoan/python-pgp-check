@@ -4,11 +4,28 @@ import sys
 import time
 import threading
 import itertools
+import os
+import re
 
 # Unicode emojis
 CHECK_MARK = "\u2705"  # Green checkmark
 RED_X = "\u274C"  # Red X
 WARNING = "\u26A0"  # Warning sign
+
+def get_version():
+    """Get the version from the setup.py file"""
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    setup_py = os.path.join(script_dir, '../../setup.py')
+    
+    if os.path.exists(setup_py):
+        with open(setup_py, 'r') as f:
+            for line in f:
+                if line.startswith('    version='):
+                    return re.search(r"'([^']+)'", line).group(1)
+    
+    return 'unkown'
+
+__version__ = get_version()
 
 def calculate_file_hash(file_path, hash_algorithm='sha256'):
     """Calculate the hash of a file."""
@@ -33,7 +50,9 @@ def main():
     parser.add_argument('expected_hash', nargs='?', help='Expected hash value for verification')
     parser.add_argument('--algorithm', default='sha256', choices=['md5', 'sha1', 'sha256', 'sha512'],
                         help='Hash algorithm to use (default: sha256)')
-    
+    parser.add_argument('-v', '--version', action='version', version=f'%(prog)s {__version__}',
+                        help='Show the version of the package')
+
     args = parser.parse_args()
 
     try:
