@@ -1,8 +1,9 @@
 import os
 import tempfile
 import pytest
-from pgp_check.cli import calculate_file_hash, verify_hash, main
+from pgp_check.cli import calculate_file_hash, main
 import sys
+
 
 # Helper function to create a temporary file with content
 def create_temp_file(content):
@@ -14,25 +15,17 @@ def create_temp_file(content):
 # Fixture to create a temporary file for testing
 @pytest.fixture
 def temp_file():
-    content = "Hello, World!"
+    content = "Goodnight, Moon!"
     path = create_temp_file(content)
     yield path
     os.remove(path)
 
 def test_calculate_file_hash(temp_file):
-    expected_hash = "dffd6021bb2bd5b0af676290809ec3a53191dd81c7f70a4b28688a362182986f"
+    expected_hash = "ef763006da6fd870bcf8c389050cac0f0f2b62f5355d0379d7162a39642ce68c"
     assert calculate_file_hash(temp_file) == expected_hash
 
-def test_verify_hash_success(temp_file):
-    correct_hash = "dffd6021bb2bd5b0af676290809ec3a53191dd81c7f70a4b28688a362182986f"
-    assert verify_hash(temp_file, correct_hash) == True
-
-def test_verify_hash_failure(temp_file):
-    incorrect_hash = "incorrect_hash"
-    assert verify_hash(temp_file, incorrect_hash) == False
-
 def test_main_success(temp_file, capsys):
-    correct_hash = "dffd6021bb2bd5b0af676290809ec3a53191dd81c7f70a4b28688a362182986f"
+    correct_hash = "ef763006da6fd870bcf8c389050cac0f0f2b62f5355d0379d7162a39642ce68c"
     
     # Simulate CLI arguments
     sys.argv = ['python-pgp-check', temp_file, correct_hash]
@@ -75,7 +68,7 @@ def test_main_file_not_found(capsys):
     assert "\u274C" in captured.out  # Check for red X
 
 def test_main_with_algorithm(temp_file, capsys):
-    md5_hash = "65a8e27d8879283831b664bd8b7f0ad4"
+    md5_hash = "3af7eae7dfeba42339bf8517f011a21f"
 
     # Simulate CLI arguments
     sys.argv = ['python-pgp-check', temp_file, md5_hash, '--algorithm', 'md5']
