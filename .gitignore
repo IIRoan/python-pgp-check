@@ -5,3 +5,4 @@ build
 .pytest_cache
 /.pytest_cache
 venv
+/python_pgp_check.egg-info/
