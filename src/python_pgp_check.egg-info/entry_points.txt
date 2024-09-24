@@ -1,0 +1,2 @@
+[console_scripts]
+python-pgp-check = pgp_check.cli:main
