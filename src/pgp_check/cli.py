@@ -6,26 +6,14 @@ import threading
 import itertools
 import os
 import re
+from importlib.metadata import version
 
 # Unicode emojis
 CHECK_MARK = "\u2705"  # Green checkmark
 RED_X = "\u274C"  # Red X
 WARNING = "\u26A0"  # Warning sign
 
-def get_version():
-    """Get the version from the setup.py file"""
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    setup_py = os.path.join(script_dir, '../../setup.py')
-    
-    if os.path.exists(setup_py):
-        with open(setup_py, 'r') as f:
-            for line in f:
-                if line.startswith('    version='):
-                    return re.search(r"'([^']+)'", line).group(1)
-    
-    return 'unkown'
-
-__version__ = get_version()
+__version__ = version("python-pgp-check")
 
 def calculate_file_hash(file_path, hash_algorithm='sha256'):
     """Calculate the hash of a file."""
