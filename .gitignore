@@ -6,3 +6,5 @@ build
 /.pytest_cache
 venv
 /python_pgp_check.egg-info/
+__pycache__
+python_pgp_check.egg-info
