@@ -122,6 +122,7 @@ def verify_hash(calculated_hash: str, expected_hash: str) -> bool:
         expected_hash.lower().encode()
     )
 
+
 def main():
     parser = argparse.ArgumentParser(
         description='Fast and secure file hash calculator and verifier',
@@ -148,48 +149,53 @@ def main():
         file_path = Path(args.file_location).expanduser().resolve()
         
         if not file_path.exists():
-            print(f"{RED_X} {RED}Error: File not found - {file_path}{RESET}")
+            print(f"\n{RED_X} {RED}Error: File not found - {file_path}{RESET}")
             sys.exit(2)
         
-        # Show file info
+        # Show file info with better formatting
         file_size = file_path.stat().st_size
-        print(f"{INFO} File: {file_path}")
-        print(f"{INFO} Size: {file_size / (1024*1024):.2f} MB")
-        print(f"{WARNING} Algorithm: {args.algorithm}")
-        print("Calculating: ", end='', flush=True)
+        file_size_mb = file_size / (1024*1024)
+        
+        print(f"{'─'*80}")
 
-        # Initialize stop event and spinner
+        print(f"{INFO} File Details:")
+        print(f"  • Path: {file_path}")
+        print(f"  • Size: {file_size_mb:.2f} MB")
+        print(f"  • Algorithm: {args.algorithm.upper()}")
+        print(f"{'─'*80}")
+        print(f"Calculating hash... ", end='', flush=True)
+
         stop_event = threading.Event()
         spinner_thread = threading.Thread(target=spinner_animation, args=(stop_event,))
         spinner_thread.daemon = True
         spinner_thread.start()
 
         try:
-            # Calculate hash
             calculator = HashCalculator(str(file_path), args.algorithm)
             calculated_hash, duration = calculator.calculate_hash()
         finally:
-            # Stop spinner and clean up the line
             stop_event.set()
             time.sleep(0.1)
-            sys.stdout.write('\r' + ' ' * 20 + '\r')  # Clear the entire line
+            sys.stdout.write('\r' + ' ' * 50 + '\r')
             sys.stdout.flush()
         
-        print(f"{INFO} Time taken: {format_time(duration)}")
+        print(f"Completed in {format_time(duration)}")
+
 
         if args.expected_hash:
-            print(f"Calculated: {calculated_hash}")
-            print(f"Expected:   {args.expected_hash}")
+            print("Hash Verification:")
+            print(f"  Calculated: {YELLOW}{calculated_hash}{RESET}")
+            print(f"  Expected:   {YELLOW}{args.expected_hash}{RESET}")
             
             if verify_hash(calculated_hash, args.expected_hash):
-                print(f"\n{CHECK_MARK} {GREEN}Hash verification successful!{RESET}")
+                print(f"{CHECK_MARK} {GREEN}Success: Hashes match!{RESET}")
                 sys.exit(0)
             else:
-                print(f"\n{RED_X} {RED}Hash verification failed!{RESET}")
+                print(f"{RED_X} {RED}Error: Hashes do not match!{RESET}")
                 sys.exit(1)
         else:
-            print(f"Hash: {calculated_hash}")
-            sys.exit(0)
+            print(f"Generated Hash: {YELLOW}{calculated_hash}{RESET}")
+        
 
     except KeyboardInterrupt:
         print(f"\n{WARNING} {YELLOW}Operation cancelled by user{RESET}")
